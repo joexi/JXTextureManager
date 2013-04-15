@@ -9,7 +9,7 @@
 
 // Import the interfaces
 #import "HelloWorldLayer.h"
-
+#import "JXTextureManager.h"
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
 
@@ -34,18 +34,17 @@
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
-		
-		// create and initialize a Label
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Hello World" fontName:@"Marker Felt" fontSize:64];
-
-		// ask director the the window size
-		CGSize size = [[CCDirector sharedDirector] winSize];
-	
-		// position the label on the center of the screen
-		label.position =  ccp( size.width /2 , size.height/2 );
-		
-		// add the label as a child to this Layer
-		[self addChild: label];
+        CCSprite *sp = [CCSprite node];
+        sp.position = ccp(self.contentSize.width/2,self.contentSize.height/2);
+        [self addChild:sp];
+        [JXTextureManager addImageAsync:@"Icon-72.png" callback:^(CCTexture2D *texture) {
+            NSLog(@"加载成功");
+            [sp setTexture:texture];
+            [sp setTextureRect:CGRectMake(0, 0,
+                                          texture.contentSize.width,
+                                          texture.contentSize.height)];
+        }];
+        NSLog(@"开始加载");
 	}
 	return self;
 }
